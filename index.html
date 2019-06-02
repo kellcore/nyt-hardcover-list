@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> New York Times Hardcover Bestsellers List </title>
+    <style>
+    body {
+        font-family: Helvetica, Arial, sans-serif;
+    }
+    .headline {
+        text-align: center;
+    }
+    .book {
+         display: flex;          
+         flex-direction: column;  
+         align-items: center;     
+         text-align: center;
+     } 
+    .book img {
+        height: 400px;
+        width: 400px;
+    } 
+    </style>
+</head>
+<body>
+    <h1 class="headline"> Current New York Times Hardcover Fiction Bestsellers </h1>
+    <h4 class="headline"> Copyright (c) 2019 The New York Times Company.  All Rights Reserved. </h4>
+    <script>
+        
+        var url = 'https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=<redacted>';
+
+        fetch (url)
+        .then(res => res.json())
+        .then(response => {
+            //response.results.books.forEach(i => console.log(i.author, i.book_image, i.description, i.title))
+            //console.log(response);
+            
+            response.results.books.map(i => {
+                
+                var makeDiv = document.createElement('div');
+                var para = document.createElement('p');
+                var bookPic = document.createElement('img');
+                bookPic.src = (i.book_image);
+                var author = document.createTextNode(i.author);
+                var description = document.createTextNode(i.description);
+                var title = document.createTextNode(i.title);
+                var rank = document.createTextNode(i.rank);
+                var weeksOnList = document.createTextNode("Weeks on List: " + i.weeks_on_list);
+                var buyLink = document.createElement('a');
+                buyLink.href = i.amazon_product_url;
+                buyLink.textContent = "Amazon";
+
+                para.appendChild(bookPic);
+                para.appendChild(document.createElement('br'));
+                para.appendChild(rank);
+                para.appendChild(document.createElement('br'));
+                para.appendChild(title);
+                para.appendChild(document.createElement('br'));
+                para.appendChild(author);
+                para.appendChild(document.createElement('br'));
+                para.appendChild(description);
+                para.appendChild(document.createElement('br'));
+                para.appendChild(weeksOnList);
+                para.appendChild(document.createElement('br'));
+                para.appendChild(buyLink);
+                para.appendChild(document.createElement('br'));
+                para.className = 'book';
+                 
+                makeDiv.appendChild(para);
+                document.body.appendChild(makeDiv);
+                
+            })
+            
+        })
+        
+        .catch(error => console.error('Error:', error));
+    
+    </script>
+</body>
+</html>
+
